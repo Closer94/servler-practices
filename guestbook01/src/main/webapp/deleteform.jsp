@@ -20,6 +20,8 @@
 			<td><input type="password" name="password"></td>
 			<td><input type="submit" value="확인"></td>
 			<td><a href="">메인으로 돌아가기</a></td>
+			
+			
 		</tr>
 	</table>
 	</form>
