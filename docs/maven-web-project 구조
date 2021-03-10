@@ -1,0 +1,27 @@
+helloweb
+   |--- [/src]
+   		  |--- [/main]
+   		  |      |--- [/java]
+   		  |		 |		 |--- /com
+   		  |      |		 |      |--- /bitacademy
+   		  |      |		 |      |		 |--- /helloweb
+   		  |      |		 |      |		 |         |--- /controller
+   		  |      |		 |      |		 |		   |		|--- HelloServlet.java
+   		  |      |--- [/resource] //설정작업 파일이 들어간다.
+   		  |--- [/test]   		         
+   		  |      |--- [/java]
+   		  |		 |		 |--- /com
+   		  |      |		 |      |--- /bitacademy
+   		  |      |		 |      |		 |--- /helloweb
+   		  |      |		 |      |		 |         |--- /controller
+   		  |      |		 |      |		 |		   |		|--- /test
+   		  |      |		 |      |		 |		   |		|	   |--- /HelloServlet.java   		 
+   		  |      |--- [/resource] 
+* 소스 = package 
+		+ code(*.java) 
+		+ resources(*.xml, *.properties, *.yml)
+
+*WEB-INF 폴더에는 접근할 수 없다.
+=> WEB-INF 에는 src 폴더에 작성한 HelloServlet.java 등의 서블릿들이 컴파일 되어 들어가있고, 라이브러리도 추가가 된다.
+=> and resource 폴더에 있는 설정파일들이 복사되어 추가 된다.
+webapp 가 war 파일로 압축되어 Tomcat으로 전송
