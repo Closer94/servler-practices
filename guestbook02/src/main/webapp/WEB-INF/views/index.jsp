@@ -1,6 +1,6 @@
 <%@page import="java.util.List"%>
-<%@page import="com.bitacademy.guestbook.dao.GuestbookDao"%>
-<%@page import="com.bitacademy.guestbook.vo.GuestbookVo"%>
+<%@page import="com.bitacademy.mysite.dao.GuestbookDao"%>
+<%@page import="com.bitacademy.mysite.vo.GuestbookVo"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%

@@ -1,5 +1,5 @@
-<%@page import="com.bitacademy.guestbook.vo.GuestbookVo"%>
-<%@page import="com.bitacademy.guestbook.dao.GuestbookDao"%>
+<%@page import="com.bitacademy.mysite.vo.GuestbookVo"%>
+<%@page import="com.bitacademy.mysite.dao.GuestbookDao"%>
 <%
 	request.setCharacterEncoding("utf-8");
 

@@ -1,5 +1,5 @@
 
-<%@page import="com.bitacademy.guestbook.dao.GuestbookDao"%>
+<%@page import="com.bitacademy.mysite.dao.GuestbookDao"%>
 <%
 
 	String no = request.getParameter("no");
