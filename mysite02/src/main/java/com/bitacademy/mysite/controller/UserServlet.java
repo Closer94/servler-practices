@@ -90,6 +90,27 @@ public class UserServlet extends HttpServlet {
 			}
 			
 			WebUtil.redirect(request.getContextPath(), request, response);
+		} else if("updateform".equals(action)) {
+			// Access Control (접근제어를 해야한다. - 로그인 한 경우에만)
+			//1. 세션 객체 가져오기
+			HttpSession session = request.getSession();
+			if(session == null) {
+				WebUtil.redirect(request.getContextPath(), request, response);
+			}
+			
+			//1. 세션에서 authUser 객체 가져오기
+			UserVo authUser = (UserVo) session.getAttribute("authUser");
+			if(authUser == null) {
+				WebUtil.redirect(request.getContextPath(), request, response);
+				return;
+			}
+			
+			Long no = authUser.getNo();
+//			UserVo userVo = new UserDao().findByNo(no);
+			UserVo userVo = new UserVo();
+			
+			request.setAttribute("userVO", userVo);
+			WebUtil.forword("/WEB-INF/views/user/updateform.jsp", request, response);
 		}
 		else {
 			WebUtil.redirect(request.getContextPath(), request, response);
