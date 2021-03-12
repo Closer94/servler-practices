@@ -1,17 +1,19 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@page import="com.bitacademy.mysite.vo.GuestbookVo"%>
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
-	List<GuestbookVo> list = (List<GuestbookVo>)request.getAttribute("list");
+	pageContext.setAttribute("newline", "\n");
 %>	
-	
 <!DOCTYPE html>
 <html>
 <head>
 <title>mysite</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
-<link href="<%= request.getContextPath() %>/assets/css/guestbook.css" rel="stylesheet" type="text/css">
+<link href="${pageContext.request.contextPath }/assets/css/guestbook.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 	<div id="container">
@@ -27,7 +29,7 @@
 		</div>
 		<div id="content">
 			<div id="guestbook">
-				<form action="<%= request.getContextPath()%>/guestbook" method="post">
+				<form action="${pageContext.request.contextPath }/guestbook" method="post">
 					<input type="hidden" name="a" value="insert">
 					<table>
 						<tr>
@@ -43,28 +45,29 @@
 					</table>
 				</form>
 				<ul>
-				<% 
-					for(GuestbookVo vo : list){
-				%>
-					<li>
-						<table>
-							<tr>
-								<td><%=vo.getNo() %></td>
-								<td><%=vo.getName() %></td>
-								<td><%=vo.getReg_date() %></td>
-								<td><a href="<%=request.getContextPath() %>/guestbook?a=deleteform&no=<%=vo.getNo()%>">삭제</a></td>
-							</tr>
-							<tr>
-								<td colspan=4>
-								<%= vo.getContents() %>
-								</td>
-							</tr>
-						</table>
-						<br>
-					</li>
-				<% 
-					}
-				%>
+					<c:set var="count" value="${fn:length(list) }" />
+					<c:forEach items="${list }" var="vo" varStatus="status">
+						<li>
+							<table>
+								<tr>
+									<td>[${count-status.index }]</td>
+									<td>${vo.name }</td>
+									<td>${vo.reg_date }</td>
+									<td><a href="${pageContext.request.contextPath }/guestbook?a=deleteform&no=${vo.no }">삭제</a></td>
+								</tr>
+								<tr>
+									<td colspan=4>
+										<!-- 게시판 contents 의 개행 설정 -->
+										<!-- ${fn:replace(vo.contents, "\n", "<br>") } \n 에서 오류가 뜬다.-->
+										<!-- pageContext에 자바코드로 등록한다. (맨 위에 등록했음)-->
+										${fn:replace(vo.contents, newline, "<br/>") }	
+
+									</td>
+								</tr>
+							</table>
+							<br>
+						</li>
+					</c:forEach>
 				</ul>
 			</div>
 		</div>
