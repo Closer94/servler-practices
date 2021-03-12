@@ -5,6 +5,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.bitacademy.mysite.dao.UserDao;
 import com.bitacademy.mysite.vo.UserVo;
@@ -42,6 +43,53 @@ public class UserServlet extends HttpServlet {
 		}
 		else if("joinsuccess".equals(action)) {
 			WebUtil.forword("/WEB-INF/views/user/joinsuccess.jsp", request, response);
+		}else if("loginform".equals(action)) {
+			WebUtil.forword("/WEB-INF/views/user/loginform.jsp", request, response);
+		}else if("login".equals(action)) {
+			String email = request.getParameter("email");
+			String password = request.getParameter("password");
+			
+			UserVo vo = new UserVo();
+			vo.setEmail(email);
+			vo.setPassword(password);
+			
+			UserVo authUser = new UserDao().findByEmailAndPassword(vo);
+			
+			//로그인 인증 실패한 경우
+			if(authUser == null) {
+				request.setAttribute("authResult", "fail");
+				WebUtil.forword("/WEB-INF/views/user/loginform.jsp", request, response);
+				return;
+			}
+			
+			//로그인 인증 처리
+			HttpSession session = request.getSession(true); //톰켓의 Session Manager에게 sessionid에 맵핑된 세션객체 return
+			                                  //매개변수 true: 없으면 새로 만들어줘!, false: 없으면 null로 반환해줘!
+			session.setAttribute("authUser", authUser); //authUser 이름으로 authUser 객체를 담는다.
+			
+			//응답
+			WebUtil.redirect(request.getContextPath(), request, response);
+			
+		}else if("logout".equals(action)) {
+			//1. 세션을 가져온다.
+			HttpSession session = request.getSession();
+			if(session == null) {
+				WebUtil.redirect(request.getContextPath(), request, response);
+				return;
+			}
+			//2. authUser 이름의 객체를 찾아본다.
+			UserVo authUser = (UserVo) session.getAttribute("authUser");
+			if(authUser == null) {
+				WebUtil.redirect(request.getContextPath(), request, response);
+				return;
+			}
+			//3. 세션 안에 있는 authUser 객체를 삭제한다. ==> 로그아웃 처리
+			if(session != null && session.getAttribute("authUser") != null) {
+				session.removeAttribute("authUser");
+				session.invalidate();
+			}
+			
+			WebUtil.redirect(request.getContextPath(), request, response);
 		}
 		else {
 			WebUtil.redirect(request.getContextPath(), request, response);

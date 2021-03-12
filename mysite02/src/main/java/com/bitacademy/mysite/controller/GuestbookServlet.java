@@ -39,7 +39,7 @@ public class GuestbookServlet extends HttpServlet {
 			String password = request.getParameter("password");
 			
 			new GuestbookDao().delete(no, password);
-			WebUtil.redirect(request.getContextPath() + "/guestbook", request, response);
+			              
 		}
 		else {
 			List<GuestbookVo> list = new GuestbookDao().findAll();

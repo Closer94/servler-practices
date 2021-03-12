@@ -1,6 +1,7 @@
 package com.bitacademy.mysite.vo;
 
 public class UserVo {
+	private Long no;
 	private String name;
 	private String email;
 	private String password;
@@ -30,6 +31,12 @@ public class UserVo {
 	}
 	public void setGender(String gender) {
 		this.gender = gender;
+	}
+	public void setNo(Long no) {
+		this.no = no;
+	}
+	public Long getNo() {
+		return no;
 	}
 	@Override
 	public String toString() {
