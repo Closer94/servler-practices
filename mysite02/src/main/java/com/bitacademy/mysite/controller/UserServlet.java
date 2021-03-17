@@ -16,7 +16,6 @@ public class UserServlet extends HttpServlet {
        
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("utf-8");
 		
 		String action = request.getParameter("a");
 		
@@ -34,8 +33,6 @@ public class UserServlet extends HttpServlet {
 			userVo.setEmail(email);
 			userVo.setGender(gender);
 	
-			System.out.println(userVo);
-			
 			new UserDao().insert(userVo);
 			
 			WebUtil.redirect(request.getContextPath() + "/user?a=joinsuccess", request, response);
@@ -106,11 +103,27 @@ public class UserServlet extends HttpServlet {
 			}
 			
 			Long no = authUser.getNo();
-//			UserVo userVo = new UserDao().findByNo(no);
-			UserVo userVo = new UserVo();
+			UserVo userVo = new UserDao().findByNo(no);
 			
-			request.setAttribute("userVO", userVo);
+			request.setAttribute("userVo", userVo);
 			WebUtil.forword("/WEB-INF/views/user/updateform.jsp", request, response);
+		}
+		else if("update".equals(action)) {
+			String name = request.getParameter("name");
+			String password = request.getParameter("password");
+			String email = request.getParameter("email");
+			String gender = request.getParameter("gender");
+			
+			UserVo userVo = new UserVo();
+			userVo.setName(name);
+			userVo.setPassword(password);
+			userVo.setEmail(email);
+			userVo.setGender(gender);
+			
+			new UserDao().update(userVo, email);
+			
+			WebUtil.redirect(request.getContextPath(), request, response);
+			
 		}
 		else {
 			WebUtil.redirect(request.getContextPath(), request, response);

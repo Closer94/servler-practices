@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.bitacademy.mysite.dao.GuestbookDao;
 import com.bitacademy.mysite.vo.GuestbookVo;
@@ -15,11 +16,15 @@ import com.bitacademy.web.mvc.WebUtil;
 public class GuestbookServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("utf-8");
 		
 		String action = request.getParameter("a");
 		
+		
 		if("deleteform".equals(action)) {
+			String no = request.getParameter("no");
+			
+			request.setAttribute("no", no);
+			
 			WebUtil.forword("/WEB-INF/views/guestbook/deleteform.jsp", request, response);
 		} else if("insert".equals(action)){
 			String name = request.getParameter("name");
@@ -39,7 +44,8 @@ public class GuestbookServlet extends HttpServlet {
 			String password = request.getParameter("password");
 			
 			new GuestbookDao().delete(no, password);
-			              
+			
+			WebUtil.redirect(request.getContextPath() + "/guestbook", request, response);
 		}
 		else {
 			List<GuestbookVo> list = new GuestbookDao().findAll();

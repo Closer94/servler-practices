@@ -10,6 +10,108 @@ import com.bitacademy.mysite.vo.UserVo;
 
 public class UserDao {
 	
+
+	public boolean update(UserVo userVo, String name) {
+		// TODO Auto-generated method stub
+		boolean result = false;
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		try {
+			conn = getConnection();
+			
+			String sql = "update user " + 
+						"set name = ?, email = ?, password = ?, gender = ?" + 
+						"where email = ?";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, userVo.getName());
+			pstmt.setString(2, userVo.getEmail());
+			pstmt.setString(3, userVo.getPassword());
+			pstmt.setString(4, userVo.getGender());
+			pstmt.setString(5, userVo.getEmail());
+			
+			int count = pstmt.executeUpdate();
+			
+			result = count == 1;
+		}catch (SQLException e) {
+			// 1. 사과
+			// 2. log
+			System.out.println("error: " + e);
+		} finally {
+			try {
+				// 자원 정리
+				if (pstmt != null) {
+					pstmt.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		
+		return result;
+	}
+	
+	public UserVo findByNo(Long no) {
+		UserVo findUser = null;
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			conn = getConnection();
+			
+			String sql = "select name, email, gender from user where no = ?";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setFloat(1, no);
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				String name = rs.getString(1);
+				String email = rs.getString(2);
+				String gender = rs.getString(3);
+				
+				findUser = new UserVo();
+				findUser.setName(name);
+				findUser.setEmail(email);
+				findUser.setGender(gender);
+			}
+			
+			
+		}catch (SQLException e) {
+			// 1. 사과
+			// 2. log
+			System.out.println("error: " + e);
+		} finally {
+			try {
+				// 자원 정리
+				if(rs != null) {
+					rs.close();
+				}
+				if (pstmt != null) {
+					pstmt.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		return findUser;
+	}
+	
+	
 	public UserVo findByEmailAndPassword(UserVo vo) {
 		UserVo userVo = null;
 		
@@ -125,4 +227,8 @@ public class UserDao {
 
 		return conn;
 	}
+
+
+
+	
 }

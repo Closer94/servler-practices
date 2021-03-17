@@ -11,7 +11,25 @@ import com.bitacademy.web.mvc.WebUtil;
 public class MainServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
+	//---------------- Filter ---------------------------------------
+	@Override
+	public void init() throws ServletException {
+		System.out.println("init() called");
+		super.init();
+	}
+	
+	//---------------- Filter ---------------------------------------
+	@Override
+	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		System.out.println("service() called");
+		super.service(req, resp);
+	}
+	
+
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println("doGet() called");
+		request.setCharacterEncoding("utf-8");
+		
 		int visitCount = 0;
 		// 쿠키 읽기
 		Cookie[] cookies = request.getCookies(); //쿠키는 request에 담아서 보낸다.
@@ -42,7 +60,15 @@ public class MainServlet extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println("doPost() called");
 		doGet(request, response);
 	}
 
+	
+	//---------------- Filter ---------------------------------------
+	@Override
+	public void destroy() {
+		System.out.println("destory() called!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		super.destroy();
+	}
 }

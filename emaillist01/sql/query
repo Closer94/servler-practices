@@ -1,0 +1,104 @@
+-- user
+
+desc user;
+
+-- insert
+insert into user
+values(null, '관리자', 'admin@mysite.com', '1234', 'male', now());
+
+-- select
+select no, name
+from user
+where email='admin@mysite.com' and password='1234';
+
+select * from user;
+select * from guestbook; 
+
+delete from guestbook where no >= 1 and no < 100;
+
+update user
+set name = '이갑성', email = '', password = '', gender = ''
+where no = 2;
+
+desc board;
+
+alter table board
+add writerId varchar(50) not null;
+
+select * from board;
+select writerId from board where regdate = "2021-03-16 14:48:17";
+
+select password from user where name = (select writerId from board where regdate = "2021-03-16 14:48:17");
+
+insert into board(title, content, writerId,viewCnt, regdate)
+values('안녕하세요6', '안녕하세요6. 신입입니다.', '이갑성', 0, now());
+
+delete from board where regdate = "2021-03-16 20:06:59";
+
+update board 
+set viewCnt = viewCnt + 1 
+where regdate = '2021-03-16 15:48:41';
+
+
+
+
+insert into board(title, content, writerId,viewCnt, regdate)
+values('안녕하세요7', '안녕하세요7. 신입입니다.', '이갑성', 0, now());
+insert into board(title, content, writerId,viewCnt, regdate)
+values('안녕하세요8', '안녕하세요8. 신입입니다.', '이갑성', 0, now());
+insert into board(title, content, writerId,viewCnt, regdate)
+values('안녕하세요9', '안녕하세요9. 신입입니다.', '이갑성', 0, now());
+insert into board(title, content, writerId,viewCnt, regdate)
+values('안녕하세요10', '안녕하세요10. 신입입니다.', '이갑성', 0, now());
+insert into board(title, content, writerId,viewCnt, regdate)
+values('안녕하세요11', '안녕하세요11. 신입입니다.', '이갑성', 0, now());
+insert into board(title, content, writerId,viewCnt, regdate)
+values('안녕하세요12', '안녕하세요12. 신입입니다.', '이갑성', 0, now());
+insert into board(title, content, writerId,viewCnt, regdate)
+values('안녕하세요13', '안녕하세요13. 신입입니다.', '이갑성', 0, now());
+insert into board(title, content, writerId,viewCnt, regdate)
+values('안녕하세요14', '안녕하세요14. 신입입니다.', '이갑성', 0, now());
+insert into board(title, content, writerId,viewCnt, regdate)
+values('안녕하세요15', '안녕하세요15. 신입입니다.', '이갑성', 0, now());
+insert into board(title, content, writerId,viewCnt, regdate)
+values('안녕하세요16', '안녕하세요16. 신입입니다.', '이갑성', 0, now());
+insert into board(title, content, writerId,viewCnt, regdate)
+values('안녕하세요17', '안녕하세요17. 신입입니다.', '이갑성', 0, now());
+insert into board(title, content, writerId,viewCnt, regdate)
+values('안녕하세요18', '안녕하세요18. 신입입니다.', '이갑성', 0, now());
+insert into board(title, content, writerId,viewCnt, regdate)
+values('안녕하세요19', '안녕하세요19. 신입입니다.', '이갑성', 0, now());
+insert into board(title, content, writerId,viewCnt, regdate)
+values('안녕하세요20', '안녕하세요20. 신입입니다.', '이갑성', 0, now());
+insert into board(title, content, writerId,viewCnt, regdate)
+values('안녕하세요21', '안녕하세요21. 신입입니다.', '이갑성', 0, now());
+insert into board(title, content, writerId,viewCnt, regdate)
+values('안녕하세요22', '안녕하세요22. 신입입니다.', '이갑성', 0, now());
+
+-- paging 처리를 하기 위한 쿼리문
+
+
+select N2.* from
+	( select @ROWNUM:=@ROWNUM+1 num, N1.*
+	from (
+		select * 
+		from board 
+		order by regdate desc
+	) as N1
+    WHERE (@rownum:=0)=0
+) as N2
+where num between 1 and 10;
+
+set sql_safe_updates=0;
+
+select * from board
+where title="안녕하세요22" and content="안녕하세요22. 신입입니다.";
+
+update board
+set title='안녕하세요22_1' and content='안녕하세요22_1'
+where title='안녕하세요22' and content='안녕하세요22. 신입입니다.';
+
+
+
+
+

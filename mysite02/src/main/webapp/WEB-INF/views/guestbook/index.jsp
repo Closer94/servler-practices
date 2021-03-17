@@ -17,16 +17,9 @@
 </head>
 <body>
 	<div id="container">
-		<div id="header">
-			<h1>MySite</h1>
-			<ul>
-				<li><a href="">로그인</a><li>
-				<li><a href="">회원가입</a><li>
-				<li><a href="">회원정보수정</a><li>
-				<li><a href="">로그아웃</a><li>
-				<li>님 안녕하세요 ^^;</li>
-			</ul>
-		</div>
+		
+		<c:import url="/WEB-INF/views/includes/header.jsp" />
+		
 		<div id="content">
 			<div id="guestbook">
 				<form action="${pageContext.request.contextPath }/guestbook" method="post">
@@ -53,15 +46,16 @@
 									<td>[${count-status.index }]</td>
 									<td>${vo.name }</td>
 									<td>${vo.reg_date }</td>
-									<td><a href="${pageContext.request.contextPath }/guestbook?a=deleteform&no=${vo.no }">삭제</a></td>
+									
+									<c:choose>
+										<c:when test="${authUser.name == vo.name }" >
+											<td><a href="${pageContext.request.contextPath }/guestbook?a=deleteform&no=${vo.no }">삭제</a></td>
+										</c:when>
+									</c:choose>
 								</tr>
 								<tr>
 									<td colspan=4>
-										<!-- 게시판 contents 의 개행 설정 -->
-										<!-- ${fn:replace(vo.contents, "\n", "<br>") } \n 에서 오류가 뜬다.-->
-										<!-- pageContext에 자바코드로 등록한다. (맨 위에 등록했음)-->
-										${fn:replace(vo.contents, newline, "<br/>") }	
-
+										${fn:replace(vo.contents, newline, "<br/>") }
 									</td>
 								</tr>
 							</table>
@@ -71,16 +65,10 @@
 				</ul>
 			</div>
 		</div>
-		<div id="navigation">
-			<ul>
-				<li><a href="">안대혁</a></li>
-				<li><a href="">방명록</a></li>
-				<li><a href="">게시판</a></li>
-			</ul>
-		</div>
-		<div id="footer">
-			<p>(c)opyright 2015, 2016, 2017, 2018</p>
-		</div>
+		<!-- navigation 공통임으로 별도의 파일로 만들고 include -->
+		<c:import url="/WEB-INF/views/includes/navigation.jsp" />
+		<!-- footer 공통임으로 별도의 파일로 만들고 include -->
+		<c:import url="/WEB-INF/views/includes/footer.jsp" />
 	</div>
 </body>
 </html>
