@@ -42,11 +42,29 @@
 							<td>${vo.viewCnt }</td>
 							<td>${vo.regDate }</td>
 							<c:if test="${vo.writerId == authUser.name }">
-								<td><a
-									href="${pageContext.request.contextPath }/board?a=deleteform&regDate=${vo.regDate }"
-									class="del">삭제</a></td>
+								<td>
+									<a href="${pageContext.request.contextPath }/board?a=deleteform&regDate=${vo.regDate }" class="del">삭제</a>
+								</td>
 							</c:if>
 						</tr>
+						<c:forEach items="${replyList }" var="replyVo" varStatus="status">
+							<tr>
+								<c:if test="${vo.no == replyVo.group_no}">
+									<td></td>
+									<td>
+										<a href="${pageContext.request.contextPath }/board?a=viewReply&title=${replyVo.title }&regdate=${replyVo.regDate }" style="text-align: left; padding-left: 40px;">
+											<img src="${pageContext.request.contextPath }/assets/images/reply.png" />${replyVo.title }
+										</a>
+									</td>
+									<td>${replyVo.writerId }</td>
+									<td>${replyVo.viewCnt }</td>
+									<td>${replyVo.regDate }</td>
+									<c:if test="${replyVo.writerId == authUser.name }">
+									<td><a href="${pageContext.request.contextPath }/board?a=deleteReplyform&regDate=${replyVo.regDate}" class="del">삭제</a></td>
+									</c:if>
+								</c:if>
+							</tr>
+						</c:forEach>
 					</c:forEach>
 				</table>
 

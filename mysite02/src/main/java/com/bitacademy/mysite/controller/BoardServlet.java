@@ -10,11 +10,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.bitacademy.mysite.dao.BoardDao;
+import com.bitacademy.mysite.dao.ReplyBoardDao;
 import com.bitacademy.mysite.vo.BoardVo;
+import com.bitacademy.mysite.vo.ReplyBoardVo;
 import com.bitacademy.mysite.vo.UserVo;
 import com.bitacademy.web.mvc.WebUtil;
-
-import javafx.scene.layout.Border;
 
 public class BoardServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -102,6 +102,95 @@ public class BoardServlet extends HttpServlet {
 			
 			WebUtil.redirect(request.getContextPath() + "/board", request, response);
 		}
+		else if("replyform".equals(action)) {
+			String title = request.getParameter("title");
+			String regDate = request.getParameter("regdate");
+			
+			BoardVo rootBoardVo = new BoardDao().find(title, regDate);
+			
+			request.setAttribute("rootBoardVo", rootBoardVo);
+			
+			WebUtil.forword("/WEB-INF/views/board/writeReply.jsp", request, response);
+		}
+		else if("reply".equals(action)) {
+			//댓글 단 게시물의 no
+			String rootBoardNo = request.getParameter("rootBoardNo");
+			
+			String title = request.getParameter("title");
+			String content = request.getParameter("content");
+		
+			UserVo authUser = getAuthUser(request, response);
+			
+			System.out.println(authUser);
+			
+			String writerId = authUser.getName();
+			
+			ReplyBoardVo vo = new ReplyBoardVo();
+			vo.setTitle(title);
+			vo.setContent(content);
+			vo.setWriterId(writerId);
+			vo.setGroup_no(Integer.parseInt(rootBoardNo));
+			
+			new ReplyBoardDao().insertReply(vo);
+			
+			WebUtil.redirect(request.getContextPath() + "/board", request, response);
+		}else if("deleteReplyform".equals(action)){
+			String regDate = request.getParameter("regDate");
+			
+			request.setAttribute("regDate", regDate);
+			
+			WebUtil.forword("/WEB-INF/views/board/replydeleteform.jsp", request, response);
+		} else if("deleteReply".equals(action)) {
+			String regDate = request.getParameter("regdate");
+			
+			new ReplyBoardDao().delete(regDate);
+			
+			WebUtil.redirect(request.getContextPath() + "/board", request, response);
+		} 
+		else if("viewReply".equals(action)) {
+			String title = request.getParameter("title");
+			String regDate = request.getParameter("regdate");
+			
+			ReplyBoardVo vo = new ReplyBoardDao().find(title, regDate);
+			
+			//조회수 가져오기, 조회수 증가후 갱신하기
+			int viewCnt = vo.getViewCnt();
+			new ReplyBoardDao().updateViewCnt(viewCnt, regDate);
+			
+			vo.setViewCnt(viewCnt);
+			
+			request.setAttribute("vo", vo);
+			
+			WebUtil.forword("/WEB-INF/views/board/viewReply.jsp", request, response);
+			
+			
+		}
+		else if("modifyReply".equals(action)) {
+			String title = request.getParameter("title");
+			String regDate = request.getParameter("regdate");
+			
+			ReplyBoardVo vo = new ReplyBoardDao().find(title, regDate);
+			
+			request.setAttribute("vo", vo);
+			WebUtil.forword("/WEB-INF/views/board/modifyReply.jsp", request, response);
+		}
+		else if("modifyReplyConfirm".equals(action)) {
+			String title = request.getParameter("title");
+			String content = request.getParameter("content");
+			String originTitle = request.getParameter("originTitle");
+			String originContent = request.getParameter("originContent");
+			
+			ReplyBoardVo vo = new ReplyBoardDao().findTitleContent(originTitle, originContent);
+			
+			vo.setTitle(title);
+			vo.setContent(content);
+			
+			new ReplyBoardDao().updateBoard(vo);
+			
+			request.setAttribute("vo", vo);
+			
+			WebUtil.redirect(request.getContextPath() + "/board", request, response);
+		}
 		else {
 			String page_ = request.getParameter("p");
 			int page = 1;
@@ -109,12 +198,13 @@ public class BoardServlet extends HttpServlet {
 				page = Integer.parseInt(page_);
 		
 			List<BoardVo> list = new BoardDao().findAll(page);
-
+			List<ReplyBoardVo> replyList = new ReplyBoardDao().replyfindAll();
+			
 			int count = list.size(); //게시판 총 개수
 			 
 			request.setAttribute("count", count);
 			request.setAttribute("list", list);
-			
+			request.setAttribute("replyList", replyList);
 			
 			WebUtil.forword("/WEB-INF/views/board/index.jsp", request, response);
 		}

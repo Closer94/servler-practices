@@ -39,10 +39,7 @@
 				<div class="bottom">
 					<a href="${pageContext.request.contextPath }/board">글목록</a>
 					<c:if test="${authUser.name == vo.writerId}">
-						<a href="${pageContext.request.contextPath }/board?a=modify&title=${vo.title }&regdate=${vo.regDate }">글수정</a>
-					</c:if>
-					<c:if test="${not empty authUser}">
-						<a href="${pageContext.request.contextPath }/board?a=replyform&title=${vo.title }&regdate=${vo.regDate }">댓글 게시판 달기</a>
+						<a href="${pageContext.request.contextPath }/board?a=modifyReply&title=${vo.title }&regdate=${vo.regDate }">글수정</a>
 					</c:if>
 				</div>
 			</div>

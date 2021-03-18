@@ -33,7 +33,9 @@
 							<td colspan=4><textarea name="contents" id="content"></textarea></td>
 						</tr>
 						<tr>
-							<td colspan=4 align=right><input type="submit" VALUE=" 확인 "></td>
+							<c:if test="${not empty authUser }">
+								<td colspan=4 align=right><input type="submit" VALUE=" 확인 "></td>
+							</c:if>
 						</tr>
 					</table>
 				</form>

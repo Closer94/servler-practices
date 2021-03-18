@@ -94,11 +94,37 @@ set sql_safe_updates=0;
 select * from board
 where title="안녕하세요22" and content="안녕하세요22. 신입입니다.";
 
+
 update board
-set title='안녕하세요22_1' and content='안녕하세요22_1'
-where title='안녕하세요22' and content='안녕하세요22. 신입입니다.';
+set title = '안녕하세요22_1', content = '안녕하세요22_1'
+where no = 35;
 
+select no, title, content, writerId, viewCnt, date_format(regDate, '%Y-%m-%d %H:%i:%s')
+from board
+where no = 35;
 
+-- 댓글 게시판 sql문
 
+desc replyboard;
+select * from replyboard;
+delete from replyboard where no >= 0 and no <= 100;
+drop table replyboard;
 
+select N2.* from
+	( select @ROWNUM:=@ROWNUM+1 num, N1.*
+	from (
+		select * 
+		from board 
+		order by regdate desc
+	) as N1
+    WHERE (@rownum:=0)=0
+) as N2
+where num between 1 and 10;
 
+insert into replyboard(title, content, writerId, viewCnt, regdate, group_no, order_no, depth)
+values('댓글3', '댓글3 신입입니다.', '이갑성', 0, now(), 37, (select ifnull(MAX(order_no), 0) from replyboard a where group_no=37 order by order_no desc) +1, (select ifnull(MAX(depth), 0) from replyboard a where group_no=37 order by depth desc) +1);
+
+select IFNULL(MAX(order_no), 0) 
+from replyboard a 
+where group_no=37 
+order by order_no desc;
